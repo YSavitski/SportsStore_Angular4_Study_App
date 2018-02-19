@@ -1,13 +1,13 @@
 import {Injectable} from '@angular/core';
 import {Product} from './product.model';
-import {StaticDatasource} from './static.datasource';
+import {StaticDataSource} from './static.datasource';
 
 @Injectable()
 export class ProductRepository {
   private products: Product[] = [];
   private categories: string[] = [];
 
-  constructor(private dataSource: StaticDatasource) {
+  constructor(private dataSource: StaticDataSource) {
     this.dataSource.getProducts().subscribe(data => {
       this.products = data;
       this.categories = data
@@ -17,7 +17,11 @@ export class ProductRepository {
   }
 
   getProducts(category: string = null): Product[] {
-    return this.products.filter(p => p.category == null || category == p.category);
+    if (category == null) {
+      return this.products;
+    } else {
+      return this.products.filter(p => p.category == category);
+    }
   }
 
   getProduct(id: number): Product {
